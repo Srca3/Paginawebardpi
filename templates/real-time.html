@@ -157,8 +157,8 @@
                 rainData.labels.push(time);
                 uvData.labels.push(time);
 
-                // Limita la cantidad de etiquetas a mostrar
-                const maxLabels = 10;
+                // Limita la cantidad de etiquetas a mostrar a 5
+                const maxLabels = 5;
                 if (rainData.labels.length > maxLabels) {
                     rainData.labels.shift();
                     uvData.labels.shift();
@@ -168,7 +168,7 @@
                 rainData.datasets[0].data.push(data.lluvia);
                 uvData.datasets[0].data.push(data.radiacion_uv);
 
-                // Limita la cantidad de datos a mostrar
+                // Limita la cantidad de datos a mostrar a 5
                 if (rainData.datasets[0].data.length > maxLabels) {
                     rainData.datasets[0].data.shift();
                     uvData.datasets[0].data.shift();
@@ -180,6 +180,7 @@
             })
             .catch(error => console.error('Error fetching data:', error));
     }
+
 
 
     // Actualiza los gráficos cada 5 segundos (ajusta según sea necesario)
