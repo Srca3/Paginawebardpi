@@ -4,6 +4,8 @@ import json
 import sqlite3
 from datetime import datetime
 import random
+from threading import Thread
+import time
 
 app = Flask(__name__)
 
@@ -35,7 +37,48 @@ def index():
 
 @app.route('/real-time')
 def real_time():
-    return render_template('real-time.html')
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+
+    # Selecciona los últimos N datos de la tabla (ajusta según sea necesario)
+    cursor.execute('SELECT * FROM weather_data ORDER BY timestamp DESC LIMIT 10')
+    historical_data = cursor.fetchall()
+
+    conn.close()
+
+    return render_template('real-time.html', historical_data=historical_data)
+
+
+
+def update_data_periodically():
+    while True:
+        create_table()
+
+        if ser:
+            data = ser.readline().decode('utf-8').strip()
+            data_dict = json.loads(data)
+        else:
+            data_dict = {
+                'lluvia': random.uniform(0, 10),
+                'radiacion_uv': random.uniform(0, 10)
+            }
+
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            INSERT INTO weather_data (lluvia, radiacion_uv)
+            VALUES (?, ?)
+        ''', (data_dict['lluvia'], data_dict['radiacion_uv']))
+        conn.commit()
+
+        conn.close()
+
+        time.sleep(5)  # Actualiza cada 5 segundos (ajusta según sea necesario)
+
+# Inicia la tarea en segundo plano
+update_thread = Thread(target=update_data_periodically)
+update_thread.start()
 
 
 @app.route('/data')
