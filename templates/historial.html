@@ -116,11 +116,12 @@
             <a href="{{ url_for('historial') }}" class="menu-button">Historial</a>
         </div>
     </div>
-
+    <div class="header">
+      <button onclick="downloadCSV()">Descargar CSV</button>
+  </div>
+  
     <div class="container">
-        <!-- ... (tu código actual) ... -->
-
-        <table>
+        <table id="dataTable">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -142,8 +143,34 @@
         </table>
     </div>
 
-    <!-- ... (tu código actual) ... -->
 
 </body>
+<!-- Agrega este script en la sección <head> o al final del <body> -->
+<script>
+    function downloadCSV() {
+        // Obtén los datos de la tabla y conviértelos a formato CSV
+        var table = document.getElementById("dataTable");
+        var csvContent = [];
+
+        // Obtén los encabezados de la tabla
+        var headers = Array.from(table.querySelectorAll('th')).map(header => header.textContent.trim());
+        csvContent.push(headers.join(','));
+
+        // Obtén las filas de datos
+        var rows = Array.from(table.querySelectorAll('tbody tr')).map(row =>
+            Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim())
+        );
+        rows.forEach(row => csvContent.push(row.join(',')));
+
+        // Crea un enlace temporal y activa la descarga
+        var csvData = csvContent.join('\n');
+        var blob = new Blob([csvData], { type: 'text/csv' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'historial.csv';
+        link.click();
+    }
+</script>
+
 
 </html>
