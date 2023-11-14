@@ -109,35 +109,40 @@
 </head>
 
 <body>
-
-  <div class="header">
-    <div class="menu-container">
-        <a href="{{ url_for('index') }}" class="menu-button">Home</a>
-        <a href="{{ url_for('real_time') }}" class="menu-button">Mediciones en tiempo real</a>
-        <a href="{{ url_for('historial') }}" class="menu-button">Historial</a>
+    <div class="header">
+        <div class="menu-container">
+            <a href="{{ url_for('index') }}" class="menu-button">Home</a>
+            <a href="{{ url_for('real_time') }}" class="menu-button">Mediciones en tiempo real</a>
+            <a href="{{ url_for('historial') }}" class="menu-button">Historial</a>
+        </div>
     </div>
-  </div>
 
-  <div class="container">
-    <button class="download-button" onclick="showPopup()">Descargar Excel</button>
+    <div class="container">
+        <!-- ... (tu código actual) ... -->
 
-    <div class="excel-container" id="excelContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Timestamp</th>
+                    <th>Lluvia</th>
+                    <th>Radiación UV</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
 
-  <div class="popup-container" id="popupContainer">
-    <div class="popup-content">
-      <label for="formatSelector">Seleccione el formato del mapa de calor:</label>
-      <select id="formatSelector" class="popup-select">
-        <option value="tabla_mapa_calor_seagreen.xlsx">Seagreen</option>
-      </select>
-      <br>
-      <button class="popup-button" onclick="downloadExcel()">Descargar</button>
-      <button class="popup-button" onclick="hidePopup()">Cancelar</button>
-    </div>
-  </div>
-
-
+    <!-- ... (tu código actual) ... -->
 
 </body>
 

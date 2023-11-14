@@ -65,6 +65,18 @@ def data():
     conn.close()
 
     return jsonify(data_dict)
+@app.route('/historial')
+def historial():
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+
+    # Selecciona todos los datos de la tabla
+    cursor.execute('SELECT * FROM weather_data')
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return render_template('historial.html', data=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
