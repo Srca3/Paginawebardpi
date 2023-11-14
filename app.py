@@ -1,12 +1,17 @@
 from flask import Flask, render_template, jsonify
-import sqlite3
-from datetime import datetime
 import serial
 import json
+import sqlite3
+from datetime import datetime
+import random  # Importa la biblioteca para generar números aleatorios
+
 app = Flask(__name__)
 
-# Configuración del puerto serial
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+# Intenta configurar el puerto serial, pero si no es posible, utiliza datos aleatorios
+try:
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+except serial.serialutil.SerialException:
+    ser = None
 
 # Conexión a la base de datos SQLite (crea una base de datos si no existe)
 conn = sqlite3.connect('data.db')
@@ -29,9 +34,16 @@ def index():
 
 @app.route('/data')
 def data():
-    # Leer datos del puerto serial
-    data = ser.readline().decode('utf-8').strip()
-    data_dict = json.loads(data)
+    if ser:
+        # Leer datos del puerto serial
+        data = ser.readline().decode('utf-8').strip()
+        data_dict = json.loads(data)
+    else:
+        # Generar datos aleatorios si no hay conexión al puerto serial
+        data_dict = {
+            'lluvia': random.uniform(0, 10),
+            'radiacion_uv': random.uniform(0, 10)
+        }
 
     # Almacena los datos en la base de datos SQLite
     cursor.execute('''
