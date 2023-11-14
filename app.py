@@ -39,29 +39,31 @@ def index():
 def real_time():
     return render_template('real-time.html')
 
-
-
-
-@app.route('/data')
+@app.route('/data', methods=['POST'])
 def data():
     create_table()  # Crea la tabla antes de cada solicitud
-    data = request.get_json()
-    
-    if data:
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
 
-        cursor.execute('''
-            INSERT INTO weather_data (lluvia, radiacion_uv)
-            VALUES (?, ?)
-        ''', (data['lluvia'], data['radiacion_uv']))
-        
-        conn.commit()
-        conn.close()
+    if request.method == 'POST':
+        data = request.get_json()  # Obtén los datos del cuerpo JSON de la solicitud POST
+        # Aquí asumimos que los datos del JSON tienen las claves 'lluvia' y 'radiacion_uv'
+        lluvia = data.get('lluvia', None)
+        radiacion_uv = data.get('radiacion_uv', None)
 
-        return jsonify({"message": "Data received successfully"})
-    else:
-        return jsonify({"error": "No JSON data received"})
+        if lluvia is not None and radiacion_uv is not None:
+            conn = sqlite3.connect('data.db')
+            cursor = conn.cursor()
+
+            cursor.execute('''
+                INSERT INTO weather_data (lluvia, radiacion_uv)
+                VALUES (?, ?)
+            ''', (lluvia, radiacion_uv))
+            conn.commit()
+
+            conn.close()
+
+            return jsonify({'success': True}), 200
+
+    return jsonify({'error': 'Invalid request'}), 400
 
 @app.route('/historial')
 def historial():
