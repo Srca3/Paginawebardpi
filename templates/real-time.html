@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to top left, #000080, #f0f0f0);
+      font-family: Arial, sans-serif;
+    }
+
+    .header {
+      background-color: #000080;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .menu-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+    }
+
+    .menu-button {
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 70px 20px 20px; /* Ajuste de espacio para el contenido debajo del menú */
+    }
+
+    .image-container {
+      flex: 0 0 calc(33.33% - 20px);
+      margin: 10px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+    }
+
+    .image-container:hover {
+      transform: scale(1);
+      filter: brightness(80%);
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border: 4px solid #3b5998;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="menu-container">
+      <a href="index.html" class="menu-button">Home</a>
+      <a href="real-time.html" class="menu-button">Mediciones en tiempo real</a>
+      <a href="historial.html" class="menu-button">Historial</a>
+    </div>
+  </div>
+
+  <div class="container">
+       
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = PLhora src="grafico_pluviosidad_hora.png" alt="Gráfico Pluviosidad Hora" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = PLhoy src="grafico_pluviosidad_hoy.png" alt="Gráfico Pluviosidad Hoy" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = PLayer src="grafico_pluviosidad_ayer.png" alt="Gráfico Pluviosidad Ayer" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = UVhora src="grafico_radiacion_hora.png" alt="Gráfico Radiación Hora" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = UVhoy src="grafico_radiacion_hoy.png" alt="Gráfico Radiación Hoy" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id= UVayer src="grafico_radiacion_ayer.png" alt="Gráfico Radiación Ayer" onerror="this.src='cargando.png'">
+    </div>
+    
+
+
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = TEhora src="grafico_temperatura_hora.png" alt="Gráfico Temperatura Hora" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = TEhoy src="grafico_temperatura_hoy.png" alt="Gráfico Temperatura Hoy" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = TEayer src="grafico_temperatura_ayer.png" alt="Gráfico Temperatura Ayer" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = HUhora src="grafico_humedad_hora.png" alt="Gráfico Humedad Hora" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id = HUhoy src="grafico_humedad_hoy.png" alt="Gráfico Humedad Hoy" onerror="this.src='cargando.png'">
+    </div>
+    <div class="image-container" onclick="expandImage(this)">
+      <img id= HUayer src="grafico_humedad_ayer.png" alt="Gráfico Humedad Ayer" onerror="this.src='cargando.png'">
+    </div>
+
+
+
+</body>
+
+</html>

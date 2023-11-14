@@ -33,6 +33,14 @@ def create_table():
 def index():
     return render_template('index.html')
 
+@app.route('/real-time')
+def real_time():
+    return render_template('real_time.html')
+
+@app.route('/historial')
+def historial():
+    return render_template('historial.html')
+
 @app.route('/data')
 def data():
     create_table()  # Crea la tabla antes de cada solicitud
