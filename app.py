@@ -10,7 +10,7 @@ import time
 app = Flask(__name__)
 
 try:
-    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 except serial.serialutil.SerialException:
     ser = None
 
