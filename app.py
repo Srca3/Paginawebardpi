@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import serial
 import json
 import sqlite3
@@ -40,30 +40,28 @@ def real_time():
     return render_template('real-time.html')
 
 
+
+
 @app.route('/data')
 def data():
     create_table()  # Crea la tabla antes de cada solicitud
-    if ser:
-        data = ser.readline().decode('utf-8').strip()
-        data_dict = json.loads(data)
+    data = request.get_json()
+    
+    if data:
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            INSERT INTO weather_data (lluvia, radiacion_uv)
+            VALUES (?, ?)
+        ''', (data['lluvia'], data['radiacion_uv']))
+        
+        conn.commit()
+        conn.close()
+
+        return jsonify({"message": "Data received successfully"})
     else:
-        data_dict = {
-            'lluvia': random.uniform(0, 10),
-            'radiacion_uv': random.uniform(0, 10)
-        }
-
-    conn = sqlite3.connect('data.db')
-    cursor = conn.cursor()
-
-    cursor.execute('''
-        INSERT INTO weather_data (lluvia, radiacion_uv)
-        VALUES (?, ?)
-    ''', (data_dict['lluvia'], data_dict['radiacion_uv']))
-    conn.commit()
-
-    conn.close()
-
-    return jsonify(data_dict)
+        return jsonify({"error": "No JSON data received"})
 
 @app.route('/historial')
 def historial():
