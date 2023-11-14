@@ -37,9 +37,6 @@ def index():
 def real_time():
     return render_template('real-time.html')
 
-@app.route('/historial')
-def historial():
-    return render_template('historial.html')
 
 @app.route('/data')
 def data():
@@ -65,6 +62,7 @@ def data():
     conn.close()
 
     return jsonify(data_dict)
+
 @app.route('/historial')
 def historial():
     conn = sqlite3.connect('data.db')
