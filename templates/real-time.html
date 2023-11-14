@@ -68,9 +68,9 @@
 
   <div class="header">
     <div class="menu-container">
-      <a href="index" class="menu-button">Home</a>
-      <a href="real-time" class="menu-button">Mediciones en tiempo real</a>
-      <a href="historial" class="menu-button">Historial</a>
+        <a href="{{ url_for('index') }}" class="menu-button">Home</a>
+        <a href="{{ url_for('real_time') }}" class="menu-button">Mediciones en tiempo real</a>
+        <a href="{{ url_for('historial') }}" class="menu-button">Historial</a>
     </div>
   </div>
 

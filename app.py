@@ -29,15 +29,15 @@ def create_table():
     conn.commit()
     conn.close()
 
-@app.route('/templates')
+@app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/templates')
+@app.route('/real-time')
 def real_time():
     return render_template('real-time.html')
 
-@app.route('/templates')
+@app.route('/historial')
 def historial():
     return render_template('historial.html')
 
