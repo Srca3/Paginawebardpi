@@ -50,36 +50,6 @@ def real_time():
 
 
 
-def update_data_periodically():
-    while True:
-        create_table()
-
-        if ser:
-            data = ser.readline().decode('utf-8').strip()
-            data_dict = json.loads(data)
-        else:
-            data_dict = {
-                'lluvia': random.uniform(0, 10),
-                'radiacion_uv': random.uniform(0, 10)
-            }
-
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
-
-        cursor.execute('''
-            INSERT INTO weather_data (lluvia, radiacion_uv)
-            VALUES (?, ?)
-        ''', (data_dict['lluvia'], data_dict['radiacion_uv']))
-        conn.commit()
-
-        conn.close()
-
-        time.sleep(5)  # Actualiza cada 5 segundos (ajusta según sea necesario)
-
-# Inicia la tarea en segundo plano
-update_thread = Thread(target=update_data_periodically)
-update_thread.start()
-
 
 @app.route('/data')
 def data():
