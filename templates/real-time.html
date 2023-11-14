@@ -1,123 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to top left, #000080, #f0f0f0);
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Meteorológica EcoClimate UDEP</title>
+    <!-- Agrega la biblioteca de Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .header {
-      background-color: #000080;
-      padding: 10px;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-    }
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to top left, #000080, #f0f0f0);
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
 
-    .menu-container {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      height: 100%;
-    }
+        .header {
+            background-color: #000080;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .menu-button {
-      text-decoration: none;
-      color: #fff;
-      font-size: 18px;
-    }
+        .menu-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 70px 20px 20px; /* Ajuste de espacio para el contenido debajo del menú */
-    }
+        .menu-button {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+        }
 
-    .image-container {
-      flex: 0 0 calc(33.33% - 20px);
-      margin: 10px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
-    }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    .image-container:hover {
-      transform: scale(1);
-      filter: brightness(80%);
-    }
+        .content {
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
 
-    .image-container img {
-      max-width: 100%;
-      height: auto;
-      border: 4px solid #3b5998;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s ease-in-out;
-    }
-  </style>
+        .title {
+            color: #56c2c0;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #fff;
+        }
+
+        .image-container {
+            margin-left: 20px;
+            max-width: 300px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilo para los gráficos */
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
-<body>
-
-  <div class="header">
-    <div class="menu-container">
-        <a href="{{ url_for('index') }}" class="menu-button">Home</a>
-        <a href="{{ url_for('real_time') }}" class="menu-button">Mediciones en tiempo real</a>
-        <a href="{{ url_for('historial') }}" class="menu-button">Historial</a>
-    </div>
-  </div>
-
-  <div class="container">
-       
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = PLhora src="grafico_pluviosidad_hora.png" alt="Gráfico Pluviosidad Hora" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = PLhoy src="grafico_pluviosidad_hoy.png" alt="Gráfico Pluviosidad Hoy" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = PLayer src="grafico_pluviosidad_ayer.png" alt="Gráfico Pluviosidad Ayer" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = UVhora src="grafico_radiacion_hora.png" alt="Gráfico Radiación Hora" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = UVhoy src="grafico_radiacion_hoy.png" alt="Gráfico Radiación Hoy" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id= UVayer src="grafico_radiacion_ayer.png" alt="Gráfico Radiación Ayer" onerror="this.src='cargando.png'">
-    </div>
-    
 
 
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = TEhora src="grafico_temperatura_hora.png" alt="Gráfico Temperatura Hora" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = TEhoy src="grafico_temperatura_hoy.png" alt="Gráfico Temperatura Hoy" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = TEayer src="grafico_temperatura_ayer.png" alt="Gráfico Temperatura Ayer" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = HUhora src="grafico_humedad_hora.png" alt="Gráfico Humedad Hora" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id = HUhoy src="grafico_humedad_hoy.png" alt="Gráfico Humedad Hoy" onerror="this.src='cargando.png'">
-    </div>
-    <div class="image-container" onclick="expandImage(this)">
-      <img id= HUayer src="grafico_humedad_ayer.png" alt="Gráfico Humedad Ayer" onerror="this.src='cargando.png'">
-    </div>
+    <script>
+        // Inicializa los datos y las opciones para los gráficos
+        var rainData = {
+            labels: [],
+            datasets: [{
+                label: 'Lluvia',
+                data: [],
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        };
 
+        var uvData = {
+            labels: [],
+            datasets: [{
+                label: 'Radiación UV',
+                data: [],
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                tension: 0.1
+            }]
+        };
 
+        var rainChart = new Chart(document.getElementById('rainChart').getContext('2d'), {
+            type: 'line',
+            data: rainData
+        });
 
+        var uvChart = new Chart(document.getElementById('uvChart').getContext('2d'), {
+            type: 'line',
+            data: uvData
+        });
+
+        // Función para actualizar los datos y los gráficos en tiempo real
+        function updateCharts() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Actualiza las etiquetas de tiempo
+                    var time = new Date().toLocaleTimeString();
+                    rainData.labels.push(time);
+                    uvData.labels.push(time);
+
+                    // Limita la cantidad de etiquetas a mostrar
+                    const maxLabels = 10;
+                    if (rainData.labels.length > maxLabels) {
+                        rainData.labels.shift();
+                        uvData.labels.shift();
+                    }
+
+                    // Actualiza los datos de los gráficos
+                    rainData.datasets[0].data.push(data.lluvia);
+                    uvData.datasets[0].data.push(data.radiacion_uv);
+
+                    // Limita la cantidad de datos a mostrar
+                    if (rainData.datasets[0].data.length > maxLabels) {
+                        rainData.datasets[0].data.shift();
+                        uvData.datasets[0].data.shift();
+                    }
+
+                    // Actualiza los gráficos
+                    rainChart.update();
+                    uvChart.update();
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Actualiza los gráficos cada 5 segundos (ajusta según sea necesario)
+        setInterval(updateCharts, 5000);
+    </script>
 </body>
 
 </html>
