@@ -146,45 +146,74 @@
         type: 'line',
         data: uvData
     });
-
-    // Función para actualizar los datos y los gráficos en tiempo real
-    function updateCharts() {
-        fetch('/data')
-            .then(response => response.json())
-            .then(data => {
-                // Actualiza las etiquetas de tiempo
-                var time = new Date().toLocaleTimeString();
+    // Función para inicializar y actualizar los gráficos
+function initializeCharts() {
+    fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+            // Llena las etiquetas iniciales con las últimas 5 fechas
+            for (let i = 4; i >= 0; i--) {
+                const date = new Date();
+                date.setSeconds(date.getSeconds() - i);
+                const time = date.toLocaleTimeString();
                 rainData.labels.push(time);
                 uvData.labels.push(time);
+            }
 
-                // Limita la cantidad de etiquetas a mostrar a 5
-                const maxLabels = 5;
-                if (rainData.labels.length > maxLabels) {
-                    rainData.labels.shift();
-                    uvData.labels.shift();
-                }
-
-                // Actualiza los datos de los gráficos
+            // Llena los datos iniciales con los últimos 5 valores
+            for (let i = 0; i < 5; i++) {
                 rainData.datasets[0].data.push(data.lluvia);
                 uvData.datasets[0].data.push(data.radiacion_uv);
+            }
 
-                // Limita la cantidad de datos a mostrar a 5
-                if (rainData.datasets[0].data.length > maxLabels) {
-                    rainData.datasets[0].data.shift();
-                    uvData.datasets[0].data.shift();
-                }
+            // Actualiza los gráficos iniciales
+            rainChart.update();
+            uvChart.update();
+        })
+        .catch(error => console.error('Error fetching initial data:', error));
+}
 
-                // Actualiza los gráficos
-                rainChart.update();
-                uvChart.update();
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
+// Llama a la función de inicialización al cargar la página
+initializeCharts();
 
+// Función para actualizar los datos y los gráficos en tiempo real
+function updateCharts() {
+    fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+            // Actualiza las etiquetas de tiempo
+            var time = new Date().toLocaleTimeString();
+            rainData.labels.push(time);
+            uvData.labels.push(time);
 
+            // Limita la cantidad de etiquetas a mostrar a 5
+            const maxLabels = 5;
+            if (rainData.labels.length > maxLabels) {
+                rainData.labels.shift();
+                uvData.labels.shift();
+            }
 
-    // Actualiza los gráficos cada 5 segundos (ajusta según sea necesario)
-    setInterval(updateCharts, 5000);
+            // Actualiza los datos de los gráficos
+            rainData.datasets[0].data.push(data.lluvia);
+            uvData.datasets[0].data.push(data.radiacion_uv);
+
+            // Limita la cantidad de datos a mostrar a 5
+            if (rainData.datasets[0].data.length > maxLabels) {
+                rainData.datasets[0].data.shift();
+                uvData.datasets[0].data.shift();
+            }
+
+            // Actualiza los gráficos
+            rainChart.update();
+            uvChart.update();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+// Actualiza los gráficos cada 5 segundos (ajusta según sea necesario)
+setInterval(updateCharts, 5000);
+
+    
 </script>
 
 
