@@ -31,18 +31,6 @@ def create_table():
     conn.commit()
     conn.close()
 
-def get_historical_data():
-    conn = sqlite3.connect('data.db')
-    cursor = conn.cursor()
-
-    # Selecciona todos los datos de la tabla
-    cursor.execute('SELECT * FROM weather_data')
-    data = cursor.fetchall()
-
-    conn.close()
-
-    return data
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -52,22 +40,17 @@ def real_time():
     return render_template('real-time.html')
 
 
-
-
 @app.route('/data')
 def data():
     create_table()  # Crea la tabla antes de cada solicitud
-
     if ser:
-        real_time_data = ser.readline().decode('utf-8').strip()
-        real_time_data = json.loads(real_time_data)
+        data = ser.readline().decode('utf-8').strip()
+        data_dict = json.loads(data)
     else:
-        real_time_data = {
+        data_dict = {
             'lluvia': random.uniform(0, 10),
             'radiacion_uv': random.uniform(0, 10)
         }
-
-    historical_data = get_historical_data()
 
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
@@ -75,12 +58,12 @@ def data():
     cursor.execute('''
         INSERT INTO weather_data (lluvia, radiacion_uv)
         VALUES (?, ?)
-    ''', (real_time_data['lluvia'], real_time_data['radiacion_uv']))
+    ''', (data_dict['lluvia'], data_dict['radiacion_uv']))
     conn.commit()
 
     conn.close()
 
-    return jsonify({'real_time': real_time_data, 'historical': historical_data})
+    return jsonify(data_dict)
 
 @app.route('/historial')
 def historial():
