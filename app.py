@@ -8,10 +8,8 @@ from threading import Thread
 import time
 
 app = Flask(__name__)
-try:
-    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-except:
-    ser = None
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+
 
 def parse_serial_data(serial_data):
     # Se espera que los datos estén en formato "PL:0.00,UV:0.00,TE:28.30,HU:58.00"
