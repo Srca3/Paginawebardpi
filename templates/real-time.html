@@ -187,10 +187,10 @@
 
                     // Llena los datos iniciales con los últimos 5 valores
                     for (let i = 0; i < 5; i++) {
-                        rainData.datasets[0].data.push(data.lluvia);
-                        uvData.datasets[0].data.push(data.radiacion_uv);
-                        temperatureData.datasets[0].data.push(data.temperatura);
-                        humidityData.datasets[0].data.push(data.humedad);
+                        rainData.datasets[0].data.push(data.pl);
+                        uvData.datasets[0].data.push(data.uv);
+                        temperatureData.datasets[0].data.push(data.te);
+                        humidityData.datasets[0].data.push(data.hu);
                     }
 
                     // Actualiza los gráficos iniciales
@@ -224,10 +224,10 @@
                     }
 
                     // Actualiza los datos de los gráficos
-                    rainData.datasets[0].data.push(data.lluvia);
-                    uvData.datasets[0].data.push(data.radiacion_uv);
-                    temperatureData.datasets[0].data.push(data.temperatura);
-                    humidityData.datasets[0].data.push(data.humedad);
+                    rainData.datasets[0].data.push(data.pl);
+                    uvData.datasets[0].data.push(data.uv);
+                    temperatureData.datasets[0].data.push(data.te);
+                    humidityData.datasets[0].data.push(data.hu);
 
                     // Limita la cantidad de datos a mostrar a 5
                     if (rainData.datasets[0].data.length > maxLabels) {
