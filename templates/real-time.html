@@ -60,13 +60,20 @@
             font-size: 32px;
             margin-bottom: 20px;
         }
-
+        /* Estilo para los gráficos */
+        .graph-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            height: 100%; /* Asegura que el contenedor de gráficos tenga el 100% de la altura */
+        }
         /* Estilo para los gráficos */
         canvas {
-            margin-top: 20px;
             border: 1px solid #fff; /* Agregado un borde blanco para mejorar la visibilidad */
             border-radius: 10px; /* Añadido borde redondeado */
             margin: 10px; /* Añadido margen para separar los gráficos */
+            max-width: 45%; /* Ajusta el tamaño máximo de los gráficos */
+            max-height: 45vh; /* Ajusta la altura máxima de los gráficos */
         }
     </style>
 </head>
