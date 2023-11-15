@@ -14,7 +14,7 @@ ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 def parse_serial_data():
     # Se espera que los datos estén en formato "PL:0.00,UV:0.00,TE:28.30,HU:58.00"
     data = ser.readline().decode('utf-8').strip()
-    print(data)
+    print(ser)
     data_parts = data.split(',')
     
     
