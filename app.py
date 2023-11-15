@@ -73,7 +73,7 @@ def data():
     conn.commit()
 
     conn.close()
-
+    print(data_dict)
     return jsonify(data_dict)
 
 @app.route('/historial')
