@@ -34,7 +34,9 @@ def create_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             lluvia REAL,
-            radiacion_uv REAL
+            radiacion_uv REAL,
+            temperatura REAL,
+            humedad REAL       
         )
     ''')
     conn.commit()
