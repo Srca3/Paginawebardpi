@@ -67,7 +67,7 @@ def data():
     cursor.execute('''
         INSERT INTO weather_data (lluvia, radiacion_uv, temperatura, humedad)
         VALUES (?, ?, ?, ?)
-    ''', (data_dict['lluvia'], data_dict['radiacion_uv'], data_dict['temperatura'], data_dict['humedad']))
+    ''', (data_dict['PL'], data_dict['UV'], data_dict['TE'], data_dict['HU']))
     conn.commit()
 
     conn.close()
