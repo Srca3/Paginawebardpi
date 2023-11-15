@@ -9,10 +9,19 @@ import time
 
 app = Flask(__name__)
 
-try:
-    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-except serial.serialutil.SerialException:
-    ser = None
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+
+def parse_serial_data(serial_data):
+    # Se espera que los datos estén en formato "PL:0.00,UV:0.00,TE:28.30,HU:58.00"
+    data_parts = serial_data.split(',')
+    data_dict = {}
+
+    for part in data_parts:
+        key, value = part.split(':')
+        data_dict[key.lower()] = float(value)
+
+    return data_dict
+
 
 # Elimina la conexión global a la base de datos y el cursor
 
@@ -39,31 +48,31 @@ def index():
 def real_time():
     return render_template('real-time.html')
 
-@app.route('/data', methods=['POST'])
+@app.route('/data')
 def data():
     create_table()  # Crea la tabla antes de cada solicitud
+    
+    if ser:
+        data = ser.readline().decode('utf-8').strip()
+        data_dict = parse_serial_data(data)
+    else:
+        data_dict = {
+            'lluvia': random.uniform(0, 10),
+            'radiacion_uv': random.uniform(0, 10)
+        }
 
-    if request.method == 'POST':
-        data = request.get_json()  # Obtén los datos del cuerpo JSON de la solicitud POST
-        # Aquí asumimos que los datos del JSON tienen las claves 'lluvia' y 'radiacion_uv'
-        lluvia = data.get('lluvia', None)
-        radiacion_uv = data.get('radiacion_uv', None)
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
 
-        if lluvia is not None and radiacion_uv is not None:
-            conn = sqlite3.connect('data.db')
-            cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO weather_data (lluvia, radiacion_uv, temperatura, humedad)
+        VALUES (?, ?, ?, ?)
+    ''', (data_dict['lluvia'], data_dict['radiacion_uv'], data_dict['temperatura'], data_dict['humedad']))
+    conn.commit()
 
-            cursor.execute('''
-                INSERT INTO weather_data (lluvia, radiacion_uv)
-                VALUES (?, ?)
-            ''', (lluvia, radiacion_uv))
-            conn.commit()
+    conn.close()
 
-            conn.close()
-
-            return jsonify({'success': True}), 200
-
-    return jsonify({'error': 'Invalid request'}), 400
+    return jsonify(data_dict)
 
 @app.route('/historial')
 def historial():
