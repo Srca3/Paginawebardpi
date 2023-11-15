@@ -122,7 +122,7 @@
   
     <div>
   
-    <div class="container">
+      <div class="excel-container">
         <table id="dataTable">
             <thead>
                 <tr>
@@ -130,6 +130,8 @@
                     <th>Timestamp</th>
                     <th>Lluvia</th>
                     <th>Radiación UV</th>
+                    <th>Temperatura</th>
+                    <th>Humedad</th>
                 </tr>
             </thead>
             <tbody>
@@ -139,11 +141,14 @@
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+</div>
 
 
 </body>
