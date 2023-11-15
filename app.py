@@ -55,7 +55,7 @@ def real_time():
 
 @app.route('/data')
 def data():
-    create_table()  # Crea la tabla antes de cada solicitud
+    #create_table()  # Crea la tabla antes de cada solicitud
     
     data_dict = parse_serial_data()
 
